@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ICar } from './model/ICar';
+import { CarService } from './service/car.service';
 
 @Component({
   selector: 'app-root',
@@ -7,15 +8,16 @@ import { ICar } from './model/ICar';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  data: ICar;
+  data: ICar[];
   date: number = Date.now();
 
+  constructor(private carService: CarService) { }
+
   populateData(): void {
-    this.data = {
-      make: 'BMW',
-      model: '3 Series',
-      year: '2019'
-    };
+    this.carService.getCars$().subscribe(
+      (cars) => this.data = cars,
+      (error) => alert('Unable to contact car service!')
+    );
     this.date = Date.now();
   }
 }
